@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-simple:1.7.30'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    testImplementation 'org.assertj:assertj-core:3.18.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8) 
+    }
+}
+
+// これは上のパターンで適用される
+//tasks.withType(JavaCompile).configureEach {
+//    javaCompiler = javaToolchains.compilerFor {
+//        languageVersion = JavaLanguageVersion.of(8)
+//    }
+//}
+
+[11, 15].each { int javaVersion ->
+
+    task ("testJava${javaVersion}", type: Test) {
+        group = 'verification'
+        description = "runs test on Java ${javaVersion}"
+        classpath = sourceSets.test.runtimeClasspath
+        testClassesDirs = sourceSets.findByName('test').output.classesDirs
+        useJUnitPlatform()
+        javaLauncher.convention(javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(javaVersion)
+        })
+    }
+    check.dependsOn "testJava${javaVersion}"
+}
