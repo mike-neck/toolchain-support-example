@@ -21,6 +21,7 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8) 
         vendor = JvmVendorSpec.AZUL
+        implementation = JvmImplementation.VENDOR_SPECIFIC
     }
 }
 
