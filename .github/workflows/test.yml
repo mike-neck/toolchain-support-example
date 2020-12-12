@@ -30,3 +30,6 @@ jobs:
       - name: run test
         run: ./gradlew check --continue --info
         continue-on-error: true
+
+      - name: show jdk
+        run: ./gradlew -q javaToolchains
